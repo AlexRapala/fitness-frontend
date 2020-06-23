@@ -49,7 +49,10 @@ class UserStore {
         })
         .catch(error => {
             // invalidate the token
+            console.log('here')
             this.token = null;
+            localStorage.removeItem("token");
+            this.setAuthenticated(false);
         })
     }
 
