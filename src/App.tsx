@@ -1,26 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect } from 'react';
 import './App.css';
+import 'antd/dist/antd.css';
+import { Button } from 'antd';
+import Login from 'components/auth/Login';
+import UserStore from 'stores/UserStore';
+import { observer } from 'mobx-react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = observer(() => {
+
+    useEffect(() => {
+        if(UserStore.token) {
+            UserStore.getUser();
+        }
+    }, [])
+
+    if(UserStore.isAuthenticated) {
+        return <div>Hello</div>
+    }
+    return (
+        <Login />
+    );
+})
 
 export default App;
