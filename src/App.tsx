@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react';
 import './App.css';
 import 'antd/dist/antd.css';
-import { Button, Spin } from 'antd';
+import { Spin } from 'antd';
+import { BrowserRouter, useHistory, useLocation } from 'react-router-dom';
 import Login from 'components/auth/Login';
+import Controller from 'components/Controller';
 import UserStore from 'stores/UserStore';
 import { observer } from 'mobx-react';
 
 const App = observer(() => {
-
+    
     useEffect(() => {
-        if(UserStore.token) {
+        if (UserStore.token) {
             UserStore.getUser();
         }
         else {
@@ -17,18 +19,23 @@ const App = observer(() => {
         }
     }, [])
 
-    if(UserStore.isAuthenticated) {
-        return <div>Hello</div>
+    if (UserStore.isAuthenticated) {
+        return (
+            <BrowserRouter>
+                <Controller />
+            </BrowserRouter>
+        )
+
     }
 
-    if(UserStore.isAuthenticated === false) {
+    if (UserStore.isAuthenticated === false) {
         return (
             <Login />
         );
     }
 
     return <Spin />
-    
+
 })
 
 export default App;

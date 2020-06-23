@@ -3,7 +3,6 @@ import { BASE_URL } from 'utils';
 import axios from 'axios';
 
 import { Error, User } from 'types';
-import { getQueriesForElement } from '@testing-library/react';
 
 class UserStore {
 
@@ -53,6 +52,50 @@ class UserStore {
             this.token = null;
             localStorage.removeItem("token");
             this.setAuthenticated(false);
+        })
+    }
+
+    @action
+    getLogs(): any {
+       return axios.get(`${BASE_URL}/lifting/logs/`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Token ${this.token}`
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+
+    @action
+    newLog(name: string) {
+        let data = {
+            name: name,
+            owner: this.user?.pk
+        }
+        return axios.post(`${BASE_URL}/lifting/logs/`, data, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Token ${this.token}`
+            },
+
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+
+    @action
+    getLifts(): any {
+        return axios.get(`${BASE_URL}/lifting/lifts/`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Token ${this.token}`
+            }
+        })
+        .catch(error => {
+            console.log(error);
         })
     }
 
