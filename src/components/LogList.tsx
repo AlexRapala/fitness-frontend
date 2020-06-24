@@ -4,18 +4,11 @@ import { Link } from 'react-router-dom';
 import UserStore from 'stores/UserStore';
 import { observer } from 'mobx-react';
 import UIStore from 'stores/UIStore';
-
-interface Log {
-    id: number,
-    name: string,
-    created: string,
-    owner: number
-}
+import { Log } from 'types';
 
 const LogList = observer(() => {
     const [logs, setLogs] = useState([]);
     const [lifts, setLifts] = useState([]);
-    const [visible, setVisible] = useState(false);
 
 
     const getLogs = () => {
@@ -29,10 +22,7 @@ const LogList = observer(() => {
         UIStore.setSelectedKeys(['log'])
         getLogs();
 
-        UserStore.getLifts()
-            .then(resp => {
-                setLifts(resp?.data);
-            });
+
     }, []);
 
     const onFinish = (values) => {
@@ -45,17 +35,20 @@ const LogList = observer(() => {
     return (
         <React.Fragment>
             <List
+                style={{width: '50%'}}
                 dataSource={logs}
                 renderItem={item => {
                     // casts it to Log type
                     let row = (item as Log);
 
                     return (
-                        <List.Item>
-                            <Descriptions style={{width: '100%'}} title={row.name} bordered>
-                                <Descriptions.Item label="Add Lifts"><Link to={`/log/${row.id}`}>Here</Link></Descriptions.Item>
-                    <Descriptions.Item label="Created Time">{row.created}</Descriptions.Item>
-                            </Descriptions>        
+                        <List.Item
+                            actions={[<Link to={`/log/${row.id}`} key={row.id}>Add Lifts</Link>]}
+                                >
+                                <List.Item.Meta
+                                    title={<Link to={`/log/${row.id}`}>{row.name}</Link>}
+                                    description={`Created on ${row.created}`}
+                                />
                         </List.Item>
                     )
                 }}

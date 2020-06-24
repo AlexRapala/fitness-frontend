@@ -18,7 +18,7 @@ const Controller: React.FC = observer(() => {
                     <Menu.Item key="log"><Link to="/log">Your Training Logs</Link></Menu.Item>
                 </Menu>
             </Header>
-            <Content style={{ height: '100%', padding: '50px' }}>
+            <Content style={{ height: '100%', padding: '50px'}}>
                 <div className="site-layout-content">
                     <Switch>
                         <Route path="/" exact render={() => <Home />} />

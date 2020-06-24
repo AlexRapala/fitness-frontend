@@ -3,48 +3,18 @@ import { Form, Input, Button, Card } from 'antd';
 import { observer } from 'mobx-react';
 import UserStore from 'stores/UserStore';
 import Errors from 'components/Errors';
+import LoginForm from './LoginForm';
+import RegisterForm from './Register';
 
 const Login = observer(() => {
+    const [isRegistering, setIsRegistering] = useState(false);
 
-    const onFinish = (values: any) => {
-        UserStore.login(values.username, values.password);
-    }
-
-    const onFinishFailed = (errorInfo: any) => {
-        console.log(errorInfo)
-    }
 
     return (
         <Card>
             {UserStore.errors && <Errors errors={UserStore.errors} />}
-            <Form
-                name="login"
-                layout="vertical"
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-            >
-                <Form.Item
-                    label="Username"
-                    name="username"
-                    rules={[{ required: true, message: 'Please input your username!' }]}
-                >
-                    <Input autoComplete="username" />
-                </Form.Item>
-
-                <Form.Item
-                    label="Password"
-                    name="password"
-                    rules={[{ required: true, message: 'Please input your password!' }]}
-                >
-                    <Input.Password autoComplete="current-password" />
-                </Form.Item>
-
-                <Form.Item>
-                    <Button loading={UserStore.loading} type="primary" htmlType="submit">
-                        Submit
-                    </Button>
-                </Form.Item>
-            </Form>
+            {!isRegistering ? <LoginForm /> : <RegisterForm />}
+            <Button onClick={() => setIsRegistering(!isRegistering)}>{!isRegistering ? 'Register' : 'Cancel'}</Button>
         </Card>
     )
 });

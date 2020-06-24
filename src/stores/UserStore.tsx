@@ -2,7 +2,7 @@ import {action, observable } from 'mobx';
 import { BASE_URL } from 'utils';
 import axios from 'axios';
 
-import { Error, User } from 'types';
+import { Error, User, LogXLift } from 'types';
 
 class UserStore {
 
@@ -35,7 +35,6 @@ class UserStore {
 
     @action 
     getUser() {
-        console.log(this.token);
         axios.get(`${BASE_URL}/auth/user/`, {
             headers: {
                 "Content-Type": "application/json",
@@ -100,6 +99,33 @@ class UserStore {
     }
 
     @action
+    getLogXLift(id: number): any {
+        return axios.get(`${BASE_URL}/lifting/log_x_lift/?log=${id}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Token ${this.token}`
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+
+    @action
+    newLogXLift(data: LogXLift): any {
+        return axios.post(`${BASE_URL}/lifting/log_x_lift/`, data, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Token ${this.token}`
+            },
+
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+
+    @action
     login(username: string, password: string): void {
         this.setLoading(true);
         axios(`${BASE_URL}/auth/login/`, {
@@ -110,6 +136,34 @@ class UserStore {
             data: {
                 username: username,
                 password: password
+            }
+        })
+        .then(resp => {
+            this.token = resp.data.key;
+            localStorage.setItem("token", resp.data.key);
+            this.setLoading(false);
+            this.setErrors(null);
+            this.getUser();
+        })
+        .catch(error => {
+            this.setErrors(error.response.data);
+            this.setLoading(false);
+        })
+    }
+
+    @action
+    register(username: string, email: string, password1: string, password2: string) {
+        this.setLoading(true);
+        axios(`${BASE_URL}/auth/registration/`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: {
+                username: username,
+                email: email,
+                password1: password1,
+                password2: password2
             }
         })
         .then(resp => {
