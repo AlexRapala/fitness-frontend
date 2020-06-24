@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Fitness",
+  "name": "A simple Training Log for simple workouts",
   "icons": [
     {
       "src": "favicon.ico",

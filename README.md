@@ -35,4 +35,5 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
     * stores
         - stores global state for user information and UI information
     * tests
+        - future tests would include testing global store actions & mocking requests to server
         - test against snapshots of components, run ```yarn update-snapshots```
